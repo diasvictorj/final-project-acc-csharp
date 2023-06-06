@@ -2,6 +2,8 @@ using Tryitter;
 
 public interface IUserRepository
 {
-    User Create(User user);
-    User GetById(int userId);
+    Task<User> CreateAsync(User user);
+    Task<User> GetByIdAsync(int userId);
+
+    Task<User> LoginAsync(UserLogin user);
 }

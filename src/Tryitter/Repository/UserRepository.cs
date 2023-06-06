@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Tryitter;
 
 class UserRepository : IUserRepository
@@ -7,15 +8,23 @@ class UserRepository : IUserRepository
     {
         _context = context;
     }
-    public User Create(User user)
+    public async Task<User> CreateAsync(User user)
     {
-        _context.Users.Add(user);
-        _context.SaveChanges();
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
         return user;
     }
 
-    public User GetById(int userId)
+    public async Task<User> GetByIdAsync(int userId)
     {
-        return _context.Users.Where(user => user.UserId == userId).First();
+        return await _context.Users.Where(user => user.UserId == userId).FirstAsync();
+    }
+
+    public async Task<User> LoginAsync(UserLogin user)
+    {
+        var userLogin = await _context.Users.
+            Where(us => us.Email == user.Email && us.Password == user.Password).FirstAsync();
+
+        return userLogin;
     }
 }
